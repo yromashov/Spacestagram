@@ -46,7 +46,7 @@ export default function App() {
       const res = await axios.get('https://api.nasa.gov/planetary/apod', {
         params: {
           api_key: process.env.KEY,
-          start_date: '2021-08-14',
+          start_date: '2021-09-01',
           end_date: '2021-09-14',
         },
       });
@@ -76,14 +76,14 @@ export default function App() {
 
   return (
     <>
-      <Grid
-        container
-        direction='column'
-        justifyContent='center'
-        alignItems='center'
-        className={classes.grid}
-      >
-        {loading === false ? (
+      {loading === false ? (
+        <Grid
+          container
+          direction='column'
+          justifyContent='center'
+          alignItems='center'
+          className={classes.grid}
+        >
           <div>
             <Typography
               variant='h1'
@@ -155,10 +155,10 @@ export default function App() {
                   );
                 })}
           </div>
-        ) : (
-          <Loading />
-        )}
-      </Grid>
+        </Grid>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 }
