@@ -1,4 +1,9 @@
 module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.KEY': JSON.stringify(process.env.KEY),
+    }),
+  ],
   mode: 'development',
   entry: ['./client/index.js'],
   output: {
