@@ -13,6 +13,7 @@ import { Grid } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import Loading from './Loading';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   myClassName: {
@@ -39,29 +40,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function App() {
+  
   const classes = useStyles();
 
   const getData = async () => {
     try {
-      const res = await axios.get('https://api.nasa.gov/planetary/apod', {
-        params: {
-          api_key: process.env.KEY,
-          start_date: '2021-09-01',
-          end_date: '2021-09-14',
-        },
-      });
-      setImgs([...res.data]);
+      const res = await axios.get('/apicall');
+      setImgs(res.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const [imgs, setImgs] = useState([]);
+  const [imgs, setImgs] = useState();
 
   const [clicks, setClicks] = useState([]);
 
   const [loading, setLoading] = useState(true);
+
 
   const handleIconClick = (id) => {
     let result = clicks.includes(id)
@@ -70,12 +67,17 @@ export default function App() {
     setClicks(result);
   };
 
+
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
     <>
+      <Link to={`/`}>
+        <button>Home</button>
+      </Link>
       {loading === false ? (
         <Grid
           container
@@ -104,6 +106,7 @@ export default function App() {
                     <Card
                       className={classes.root}
                       style={{ marginBottom: '25px' }}
+                      key={image.date}
                     >
                       <CardHeader title={image.title} subheader={image.date} />
                       <CardMedia
