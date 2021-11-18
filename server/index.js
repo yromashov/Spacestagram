@@ -14,6 +14,10 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+app.get('/userprofile', function (req, res) {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 app.get('/apicall', async function (req, res) {
   try {
     const response = await axios.get('https://api.nasa.gov/planetary/apod', {

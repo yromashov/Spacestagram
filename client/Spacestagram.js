@@ -16,7 +16,7 @@ import Loading from './Loading';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
-  myClassName: {
+  favButton: {
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -67,17 +67,33 @@ export default function App() {
     setClicks(result);
   };
 
+  const setLocalStorage= ()=>{
+    let favArray=[];
+    imgs.forEach((img)=>{
+      if(clicks.includes(img.date)){
+        favArray.push(img)
+      }
+    })
+    localStorage.setItem('likes', JSON.stringify(favArray))
+  }
 
 
   useEffect(() => {
+    if(localStorage.likes){
+      let favoriteClicks=[]
+      let favorites=JSON.parse(localStorage.likes)
+      favorites.forEach((favorite)=>{
+        favoriteClicks.push(favorite.date)
+      })
+      setClicks(favoriteClicks)
+    }
     getData();
   }, []);
 
+  console.log(clicks)
+
   return (
     <>
-      <Link to={`/`}>
-        <button>Home</button>
-      </Link>
       {loading === false ? (
         <Grid
           container
@@ -86,6 +102,7 @@ export default function App() {
           alignItems='center'
           className={classes.grid}
         >
+          <Link to={'/userprofile'} onClick={()=>{setLocalStorage()}}>Your Favorites</Link>
           <div>
             <Typography
               variant='h1'
@@ -124,7 +141,7 @@ export default function App() {
                         </Typography>
                       </CardContent>
                       <IconButton
-                        className={classes.myClassName}
+                        className={classes.favButton}
                         aria-label='add to favorites'
                         onClick={() => handleIconClick(image.date)}
                       >
@@ -141,7 +158,7 @@ export default function App() {
                             <Alert
                               action={
                                 <Button
-                                  className={classes.myClassName}
+                                  className={classes.favButton}
                                   color='inherit'
                                   size='small'
                                 ></Button>
