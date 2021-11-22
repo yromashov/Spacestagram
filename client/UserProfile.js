@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { faUserCircle } from '@fortawesome/fontawesome-free-solid';
 import { faChevronLeft } from '@fortawesome/fontawesome-free-solid';
 
 const useStyles = makeStyles((theme) => ({

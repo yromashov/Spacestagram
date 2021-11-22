@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function Loading() {
 
   return (
     <div>
-
       <Typography variant='h1' component='h2' style={{ textAlign: 'center' }}>
         Loading..Please Wait!
       </Typography>
