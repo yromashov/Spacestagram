@@ -24,7 +24,7 @@ app.get('/apicall', async function (req, res) {
   const year = date.year;
   const month = date.month;
   const day = date.day;
-  const firstDate = DateTime.now().minus({ days: 10 });
+  const firstDate = DateTime.now().minus({ days: 20 });
   const firstYear = firstDate.year;
   const firstMonth = firstDate.month;
   const firstDay = firstDate.day;

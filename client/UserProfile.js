@@ -6,11 +6,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import OutlinedFavorite from '@material-ui/icons/FavoriteBorderOutlined';
 import { Grid } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import Button from '@material-ui/core/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import { faUserCircle } from '@fortawesome/fontawesome-free-solid';
+import { faChevronLeft } from '@fortawesome/fontawesome-free-solid';
 
 const useStyles = makeStyles((theme) => ({
   favButton: {
@@ -40,13 +40,7 @@ export default function UserProfile() {
   const classes = useStyles();
 
   const favorites = JSON.parse(localStorage.likes);
-  // const [favorites, setFavorites]=useState();
 
-  // useEffect(()=>{
-  //     setFavorites(JSON.parse(localStorage.likes))
-  // },[])
-
-  console.log(favorites);
   return (
     <Grid
       container
@@ -55,49 +49,85 @@ export default function UserProfile() {
       alignItems='center'
       className={classes.grid}
     >
-      <div>
+      <div style={{ display: 'flex' }}>
+        <Link
+          to={'/'}
+          style={{
+            marginLeft: '0%',
+            position: 'fixed',
+            display: 'block',
+            marginTop: '.5%',
+            textDecoration: 'none',
+          }}
+        >
+          <div style={{ display: 'flex', marginLeft: '-300px' }}>
+            <FontAwesomeIcon
+              icon={faChevronLeft}
+              style={{
+                height: '40px',
+                width: '50',
+                color: 'white',
+                alignSelf: 'center',
+              }}
+            />
+            <p
+              style={{
+                color: 'white',
+                fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                fontSize: '2rem',
+              }}
+            >
+              Back
+            </p>
+          </div>
+        </Link>
         <Typography
           variant='h1'
-          component='h2'
-          style={{ justifyContent: 'center', color: 'white' }}
+          component='h1'
+          style={{
+            justifyContent: 'center',
+            color: 'white',
+            display: 'inline',
+          }}
         >
           Your Favorites
         </Typography>
-        {favorites &&
-          favorites
-            .sort((a, b) => {
-              let dateA = parseInt(a.date[6] + a.date[8] + a.date[9], 10);
-              let dateB = parseInt(b.date[6] + b.date[8] + b.date[9], 10);
-              return dateB - dateA;
-            })
-            .map((image) => {
-              return (
-                <Card
-                  className={classes.root}
-                  style={{ marginBottom: '25px' }}
-                  key={image.date}
-                >
-                  <CardHeader title={image.title} subheader={image.date} />
-                  <CardMedia
-                    className={classes.media}
-                    image={image.hdurl}
-                    title={image.title}
-                  />
-                  <CardContent>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-                      component='p'
-                    >
-                      {image.explanation}
-                    </Typography>
-                  </CardContent>
-                  <IconButton
-                    className={classes.favButton}
-                    aria-label='add to favorites'
-                    onClick={() => handleIconClick(image.date)}
+      </div>
+      {favorites &&
+        favorites
+          .sort((a, b) => {
+            let dateA = parseInt(a.date[6] + a.date[8] + a.date[9], 10);
+            let dateB = parseInt(b.date[6] + b.date[8] + b.date[9], 10);
+            return dateB - dateA;
+          })
+          .map((image) => {
+            return (
+              <Card
+                className={classes.root}
+                style={{ marginBottom: '25px' }}
+                key={image.date}
+              >
+                <CardHeader title={image.title} subheader={image.date} />
+                <CardMedia
+                  className={classes.media}
+                  image={image.hdurl}
+                  title={image.title}
+                />
+                <CardContent>
+                  <Typography
+                    variant='body2'
+                    color='textSecondary'
+                    component='p'
                   >
-                    {/* {clicks.includes(image.date) ? (
+                    {image.explanation}
+                  </Typography>
+                </CardContent>
+                <IconButton
+                  className={classes.favButton}
+                  aria-label='add to favorites'
+                  onClick={() => handleIconClick(image.date)}
+                >
+                  {/* {clicks.includes(image.date) ? (
                       <div
                         style={{
                           display: 'flex',
@@ -122,11 +152,10 @@ export default function UserProfile() {
                     ) : (
                       <OutlinedFavorite />
                     )} */}
-                  </IconButton>
-                </Card>
-              );
-            })}
-      </div>
+                </IconButton>
+              </Card>
+            );
+          })}
     </Grid>
   );
 }

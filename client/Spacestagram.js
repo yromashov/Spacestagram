@@ -14,6 +14,8 @@ import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import Loading from './Loading';
 import { Link } from 'react-router-dom';
+import { faUserCircle } from '@fortawesome/fontawesome-free-solid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const useStyles = makeStyles((theme) => ({
   favButton: {
@@ -40,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function App() {
-  
   const classes = useStyles();
 
   const getData = async () => {
@@ -59,7 +60,6 @@ export default function App() {
 
   const [loading, setLoading] = useState(true);
 
-
   const handleIconClick = (id) => {
     let result = clicks.includes(id)
       ? clicks.filter((click) => click != id)
@@ -67,114 +67,162 @@ export default function App() {
     setClicks(result);
   };
 
-  const setLocalStorage= ()=>{
-    let favArray=[];
-    imgs.forEach((img)=>{
-      if(clicks.includes(img.date)){
-        favArray.push(img)
+  const setLocalStorage = () => {
+    let favArray = [];
+    imgs.forEach((img) => {
+      if (clicks.includes(img.date)) {
+        favArray.push(img);
       }
-    })
-    localStorage.setItem('likes', JSON.stringify(favArray))
-  }
-
+    });
+    localStorage.setItem('likes', JSON.stringify(favArray));
+  };
 
   useEffect(() => {
-    if(localStorage.likes){
-      let favoriteClicks=[]
-      let favorites=JSON.parse(localStorage.likes)
-      favorites.forEach((favorite)=>{
-        favoriteClicks.push(favorite.date)
-      })
-      setClicks(favoriteClicks)
+    if (localStorage.likes) {
+      let favoriteClicks = [];
+      let favorites = JSON.parse(localStorage.likes);
+      favorites.forEach((favorite) => {
+        favoriteClicks.push(favorite.date);
+      });
+      setClicks(favoriteClicks);
     }
     getData();
   }, []);
-
-  console.log(clicks)
 
   return (
     <>
       {loading === false ? (
         <Grid
           container
+          display='flex'
           direction='column'
           justifyContent='center'
           alignItems='center'
           className={classes.grid}
         >
-          <Link to={'/userprofile'} onClick={()=>{setLocalStorage()}}>Your Favorites</Link>
-          <div>
+          <div style={{ display: 'flex' }}>
             <Typography
               variant='h1'
-              component='h2'
-              style={{ justifyContent: 'center', color: 'white' }}
+              component='h1'
+              style={{
+                justifyContent: 'center',
+                color: 'white',
+                display: 'inline',
+              }}
             >
               Spacestagram
             </Typography>
-            {imgs &&
-              imgs
-                .sort((a, b) => {
-                  let dateA = parseInt(a.date[6] + a.date[8] + a.date[9], 10);
-                  let dateB = parseInt(b.date[6] + b.date[8] + b.date[9], 10);
-                  return dateB - dateA;
-                })
-                .map((image) => {
-                  return (
-                    <Card
-                      className={classes.root}
-                      style={{ marginBottom: '25px' }}
-                      key={image.date}
-                    >
-                      <CardHeader title={image.title} subheader={image.date} />
-                      <CardMedia
-                        className={classes.media}
-                        image={image.hdurl}
-                        title={image.title}
-                      />
-                      <CardContent>
-                        <Typography
-                          variant='body2'
-                          color='textSecondary'
-                          component='p'
-                        >
-                          {image.explanation}
-                        </Typography>
-                      </CardContent>
-                      <IconButton
-                        className={classes.favButton}
-                        aria-label='add to favorites'
-                        onClick={() => handleIconClick(image.date)}
-                      >
-                        {clicks.includes(image.date) ? (
-                          <div
-                            style={{
-                              display: 'flex',
-                              direction: 'row',
-                              justifyContent: 'center',
-                              textAlign: 'center',
-                            }}
-                          >
-                            <FavoriteIcon style={{ fill: 'red' }} />
-                            <Alert
-                              action={
-                                <Button
-                                  className={classes.favButton}
-                                  color='inherit'
-                                  size='small'
-                                ></Button>
-                              }
-                            >
-                              Added to your favorites!!
-                            </Alert>
-                          </div>
-                        ) : (
-                          <OutlinedFavorite />
-                        )}
-                      </IconButton>
-                    </Card>
-                  );
-                })}
+            <Link
+              to={'/userprofile'}
+              onClick={() => {
+                setLocalStorage();
+              }}
+              style={{
+                marginLeft: '50%',
+                position: 'fixed',
+                display: 'block',
+                marginTop: '.5%',
+                textDecoration: 'none',
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <FontAwesomeIcon
+                  icon={faUserCircle}
+                  style={{
+                    height: '40px',
+                    width: '50',
+                    color: 'white',
+                    alignSelf: 'center',
+                  }}
+                />
+                <p
+                  style={{
+                    marginTop: '7%',
+                    color: 'white',
+                    fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                    fontSize: '2rem',
+                  }}
+                >
+                  Favorites
+                </p>
+              </div>
+            </Link>
           </div>
+          <Typography
+            variant='h3'
+            component='h3'
+            style={{
+              justifyContent: 'center',
+              color: 'white',
+              display: 'inline',
+              fontStyle: 'italic',
+            }}
+          >
+            The latest 20 photos of the day from NASA
+          </Typography>
+          {imgs &&
+            imgs
+              .sort((a, b) => {
+                let dateA = parseInt(a.date[6] + a.date[8] + a.date[9], 10);
+                let dateB = parseInt(b.date[6] + b.date[8] + b.date[9], 10);
+                return dateB - dateA;
+              })
+              .map((image) => {
+                return (
+                  <Card
+                    className={classes.root}
+                    style={{ marginBottom: '25px' }}
+                    key={image.date}
+                  >
+                    <CardHeader title={image.title} subheader={image.date} />
+                    <CardMedia
+                      className={classes.media}
+                      image={image.hdurl}
+                      title={image.title}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant='body2'
+                        color='textSecondary'
+                        component='p'
+                      >
+                        {image.explanation}
+                      </Typography>
+                    </CardContent>
+                    <IconButton
+                      className={classes.favButton}
+                      aria-label='add to favorites'
+                      onClick={() => handleIconClick(image.date)}
+                    >
+                      {clicks.includes(image.date) ? (
+                        <div
+                          style={{
+                            display: 'flex',
+                            direction: 'row',
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <FavoriteIcon style={{ fill: 'red' }} />
+                          <Alert
+                            action={
+                              <Button
+                                className={classes.favButton}
+                                color='inherit'
+                                size='small'
+                              ></Button>
+                            }
+                          >
+                            Added to your favorites!!
+                          </Alert>
+                        </div>
+                      ) : (
+                        <OutlinedFavorite />
+                      )}
+                    </IconButton>
+                  </Card>
+                );
+              })}
         </Grid>
       ) : (
         <Loading />
